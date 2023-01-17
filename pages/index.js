@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import SunCalc from "suncalc";
-import IonSearchbar from "../components/IonSearchbar";
 
 export default function Home() {
-	const [search, setSearch] = useState("");
 	// const [compassAlpha, setCompassAlpha] = useState();
-	const [compass, setCompass] = useState()
+	const [compass, setCompass] = useState();
 	const [sunPos, setSunPos] = useState();
 
 	useEffect(() => {
@@ -26,29 +24,10 @@ export default function Home() {
 
 	return (
 		<>
-			<ion-header translucent>
-				<ion-toolbar>
-					<ion-title>Search food</ion-title>
-
-					<ion-buttons slot="end">
-						<ion-button>Order By</ion-button>
-					</ion-buttons>
-				</ion-toolbar>
-			</ion-header>
-
 			<ion-content fullscreen>
 				<ion-header collapse="condense" translucent>
 					<ion-toolbar>
-						<ion-title size="large">Feed</ion-title>
-					</ion-toolbar>
-					<ion-toolbar>
-						<IonSearchbar
-							value={search}
-							onChange={(e) => setSearch(e.detail.value)}
-							placeholder="Search Food"
-							animated
-							show-cancel-button="focus"
-						/>
+						<ion-title size="large">SunLocate</ion-title>
 					</ion-toolbar>
 				</ion-header>
 
@@ -65,14 +44,16 @@ export default function Home() {
 										window.addEventListener(
 											"deviceorientation",
 											function (event) {
-												// var alpha = event.alpha; 
+												// var alpha = event.alpha;
 												// setCompassAlpha(
 												// 	360 - alpha.toFixed()
 												// );
 												var compassHeading =
 													event.webkitCompassHeading;
 
-												setCompass(compassHeading.toFixed())
+												setCompass(
+													compassHeading.toFixed()
+												);
 											}
 										);
 									}
