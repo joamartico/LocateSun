@@ -9,6 +9,8 @@ export default function Home() {
 	const [lockX, setLockX] = useState(false);
 	const xContRef = useRef();
 	const yContRef = useRef();
+	const [borderLeft, setBorderLeft] = useState()
+	const [borderRight, setBorderRight] = useState()
 
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(function (position) {
@@ -81,14 +83,20 @@ export default function Home() {
 														setBeta(betaVal);
 
 														if(compass - 45 > sunPos?.azimuth) {
+															setBorderLeft('3px solid yellow')
 															xContRef.current.style.borderLeft = "3px solid yellow";
+														} else {
+															setBorderLeft('')
 														}
 														if(compass + 45 < sunPos?.azimuth) {
 															xContRef.current.style.borderRight = "3px solid yellow";
+															setBorderRight('3px solid yellow')
+														} else {
+															setBorderRight('')
 														}
-														if (beta + 100 < sunPos.altitude) {
-															yContRef.current.style.borderTop = "3px solid yellow";
-														}
+														// if (beta + 100 < sunPos.altitude) {
+														// 	yContRef.current.style.borderTop = "3px solid yellow";
+														// }
 													}
 												);
 											}
@@ -117,7 +125,10 @@ export default function Home() {
 								<SunContainer
 									x
 									ref={xContRef}
-									borderActive={() => getBorderActiveX()}
+									style={{
+										borderLeft: borderLeft,
+										borderRight: borderRight
+									}}
 								>
 									<Sun
 										style={{
@@ -131,7 +142,6 @@ export default function Home() {
 								<SunContainer
 									y
 									ref={yContRef}
-									borderActive={() => getBorderActiveY()}
 								>
 									<Sun
 										style={{
