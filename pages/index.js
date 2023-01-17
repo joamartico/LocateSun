@@ -7,6 +7,7 @@ export default function Home() {
 	const [compass, setCompass] = useState();
 	const [sunPos, setSunPos] = useState();
 	const [gamma, setGamma] = useState();
+	const [beta, setBeta] = useState();
 	const [lockX, setLockX] = useState(false);
 	const [altitude, setAltitude] = useState()
 
@@ -32,11 +33,12 @@ export default function Home() {
 				</ion-header>
 
 				<div style={{ background: "" }}>
-					<p>Sun: Altitude: {sunPos?.altitude.toFixed()}</p>
+					<p>Sun Altitude: {sunPos?.altitude.toFixed()}</p>
 					<p>Sun Angle: {sunPos?.azimuth.toFixed()}°</p>
 					<p>Compass: {compass?.toFixed() || ""}°</p>
 					<p>Gamma: {gamma || ""}°</p>
-					<p>Altitude: {altitude || ""}</p>
+					<p>Beta: {beta || ""}°</p>
+					{/* <p>Altitude: {altitude || ""}</p> */}
 					{/* <p>{compassAlpha || "Compass Alpha"}°</p> */}
 
 					{!compass && (
@@ -63,9 +65,11 @@ export default function Home() {
 															compassHeading
 														);
 
-														var gammaVal =
-															event.beta;
-														setGama(gammaVal);
+														var gammaVal = event.gamma;
+														setGamma(gammaVal);
+
+														var betaVal = event.beta;
+														setBeta(betaVal);
 													}
 												);
 
