@@ -4,10 +4,10 @@ import SunCalc from "suncalc";
 
 export default function Home() {
 	// const [compassAlpha, setCompassAlpha] = useState();
-	const [compass, setCompass] = useState(263);
+	const [compass, setCompass] = useState();
 	const [sunPos, setSunPos] = useState();
 	const [gamma, setGamma] = useState();
-	const [beta, setBeta] = useState(117);
+	const [beta, setBeta] = useState();
 	const [lockX, setLockX] = useState(false);
 
 	useEffect(() => {
