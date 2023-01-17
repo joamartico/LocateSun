@@ -62,7 +62,7 @@ export default function Home() {
 											"deviceorientation",
 											function (event) {
 												var alpha = event.alpha; // ángulo en grados respecto al norte
-												setCompassAlpha(alpha.toFixed());
+												setCompassAlpha(360 - alpha.toFixed());
 											}
 										);
 									}
