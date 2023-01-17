@@ -6,17 +6,21 @@ import IonSearchbar from "../components/IonSearchbar";
 export default function Home() {
 	const [search, setSearch] = useState("");
 	const [compassAlpha, setCompassAlpha] = useState();
+	const [compass, setCompass] = useState()
 	const [sunPos, setSunPos] = useState();
 
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(function (position) {
 			var lat = position.coords.latitude;
 			var lng = position.coords.longitude;
-			console.log('my position: ', lat, lng)
+			console.log("my position: ", lat, lng);
 			var date = new Date();
 			const sunPos = SunCalc.getPosition(date, lat, lng);
-			const fixedAzimuth = (sunPos.azimuth * 180/(Math.PI) + 180).toFixed()
-			setSunPos({altitude: sunPos.altitude, azimuth: fixedAzimuth});
+			const fixedAzimuth = (
+				(sunPos.azimuth * 180) / Math.PI +
+				180
+			).toFixed();
+			setSunPos({ altitude: sunPos.altitude, azimuth: fixedAzimuth });
 		});
 	}, []);
 
@@ -62,7 +66,13 @@ export default function Home() {
 											"deviceorientation",
 											function (event) {
 												var alpha = event.alpha; // ángulo en grados respecto al norte
-												setCompassAlpha(360 - alpha.toFixed());
+												setCompassAlpha(
+													360 - alpha.toFixed()
+												);
+												var compassHeading =
+													event.webkitCompassHeading;
+
+												setCompass(compassHeading)
 											}
 										);
 									}
@@ -77,19 +87,20 @@ export default function Home() {
 				<p>Sun: Altitude: {sunPos?.altitude}</p>
 				<p>Sun Angle: {sunPos?.azimuth}°</p>
 
-				<br/>
-				<br/>
-				<br/>
+				<br />
+				<br />
+				<br />
 
-				<p>{compassAlpha || 'Compass Alpha'}</p>
+				<p>{compassAlpha || "Compass Alpha"}°</p>
+				<p>{compass || "Compass"}°</p>
 
-				{sunPos && compassAlpha && Math.abs(compassAlpha - sunPos.azimuth) < 5  && <Sun />}
-				
+				{sunPos &&
+					compassAlpha &&
+					Math.abs(compassAlpha - sunPos.azimuth) < 5 && <Sun />}
 			</ion-content>
 		</>
 	);
 }
-
 
 const Sun = styled.div`
 	height: 150px;
