@@ -18,7 +18,7 @@ export default function Home() {
 			var date = new Date();
 			const sunPos = SunCalc.getPosition(date, lat, lng);
 			const fixedAzimuth = (sunPos.azimuth * 180) / Math.PI + 180;
-			const fixedAltitude = (sunPos.altitude * 180) / Math.PI;
+			const fixedAltitude = (sunPos.altitude * 180) / Math.PI + 90;
 			setSunPos({ altitude: fixedAltitude, azimuth: fixedAzimuth });
 		});
 	}, []);
