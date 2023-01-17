@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import SunCalc from "suncalc";
 
 export default function Home() {
 	const [sunPos, setSunPos] = useState();
-	const [gamma, setGamma] = useState();
-	const [compass, setCompass] = useState();
-	const [beta, setBeta] = useState();
+	const [compass, setCompass] = useState(1);
+	const [beta, setBeta] = useState(1);
 	const [lockX, setLockX] = useState(false);
+	const xContRef = useRef();
+	const yContRef = useRef();
 
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(function (position) {
@@ -22,19 +23,28 @@ export default function Home() {
 		});
 	}, []);
 
+	function getBorderActiveX() {
+		if (compass - 45 > sunPos.azimuth) return "left";
+		if (compass + 45 < sunPos.azimuth) return "right";
+	}
+	function getBorderActiveY() {
+		if (beta + 100 < sunPos.altitude) return "top";
+		// if(compass - 100 > sunPos.altitude) return 'bottom'
+	}
+
 	return (
 		<>
 			<ion-content fullscreen>
-				<ion-header collapse="condense" translucent>
+				{/* <ion-header collapse="condense" translucent>
 					<ion-toolbar>
 						<ion-title size="large">SunLocate</ion-title>
 					</ion-toolbar>
-				</ion-header>
+				</ion-header> */}
 
 				<div style={{ background: "", position: "absolute" }}>
 					<p>Sun X: {sunPos?.azimuth.toFixed()}°</p>
 					<p>Sun Y: {sunPos?.altitude.toFixed()}°</p>
-					<br/>
+					<br />
 					<p>Your X: {compass?.toFixed() || ""}°</p>
 					<p>Your Y: {beta?.toFixed() || ""}°</p>
 					{/* <p>Gamma: {gamma?.toFixed() || ""}°</p> */}
@@ -64,23 +74,29 @@ export default function Home() {
 															"deviceorientation event: ",
 															event
 														);
-														// var alpha = event.alpha;
-														// setCompassAlpha(
-														// 	360 - alpha.toFixed()
-														// );
 														var compassHeading =
 															event.webkitCompassHeading;
 														setCompass(
 															compassHeading
 														);
 
-														var gammaVal =
-															event.gamma;
-														setGamma(gammaVal);
-
 														var betaVal =
 															event.beta;
 														setBeta(betaVal);
+
+														if (
+															compass - 45 >
+															sunPos?.azimuth
+														) {
+															xContRef.style.borderLeft = "3px solid yellow";
+														}
+														if (
+															compass + 45 <
+															sunPos?.azimuth
+														) {
+															xContRef.style.borderRight = "3px solid yellow";
+
+														}
 													}
 												);
 											}
@@ -106,7 +122,11 @@ export default function Home() {
 					{
 						sunPos && compass && (
 							<>
-								<SunContainer x>
+								<SunContainer
+									x
+									ref={xContRef}
+									borderActive={() => getBorderActiveX()}
+								>
 									<Sun
 										style={{
 											marginLeft:
@@ -116,12 +136,15 @@ export default function Home() {
 									/>
 								</SunContainer>
 
-								<SunContainer y>
+								<SunContainer
+									y
+									ref={yContRef}
+									borderActive={() => getBorderActiveY()}
+								>
 									<Sun
 										style={{
 											marginBottom:
-												-(beta - sunPos.altitude) *
-												10,
+												-(beta - sunPos.altitude) * 10,
 										}}
 									/>
 								</SunContainer>
@@ -148,7 +171,10 @@ const Sun = styled.div`
 const SunContainer = styled.div`
 	width: ${({ x }) => (x ? "100%" : "155px")};
 	height: ${({ y }) => (y ? "100%" : "155px")};
-	border: 1px solid #aaaa;
+	border-bottom: ${({ x }) => (x ? "3px solid #6af5" : "")};
+	border-top: ${({ x }) => (x ? "3px solid #6af5" : "")};
+	border-left: ${({ y }) => (y ? "3px solid #6af5" : "")};
+	border-right: ${({ y }) => (y ? "3px solid #6af5" : "")};
 	z-index: 999;
 	display: flex;
 	justify-content: center;
