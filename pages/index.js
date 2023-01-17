@@ -73,14 +73,14 @@ export default function Home() {
 					Allow Orientation
 				</ion-button>
 
-				<p>Sun: Altitude: {sunPos.altitude}</p>
-				<p>Sun Angle: {sunPos.azimuth}°</p>
+				<p>Sun: Altitude: {sunPos?.altitude}</p>
+				<p>Sun Angle: {sunPos?.azimuth}°</p>
 
 				<br/>
 				<br/>
 				<br/>
 
-				<p>{compassAlpha}</p>
+				<p>{compassAlpha || 'Compass Alpha'}</p>
 			</ion-content>
 		</>
 	);
