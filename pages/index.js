@@ -4,8 +4,9 @@ import SunCalc from "suncalc";
 
 export default function Home() {
 	// const [compassAlpha, setCompassAlpha] = useState();
-	const [compass, setCompass] = useState(278);
+	const [compass, setCompass] = useState();
 	const [sunPos, setSunPos] = useState();
+	const [gamma, setGamma] = useState();
 
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(function (position) {
@@ -34,7 +35,8 @@ export default function Home() {
 				<div class="ion-padding" style={{ background: "" }}>
 					<p>Sun: Altitude: {sunPos?.altitude}</p>
 					<p>Sun Angle: {sunPos?.azimuth}°</p>
-					<p>{compass || "Compass"}°</p>
+					<p>Compass: {compass || ""}°</p>
+					<p>Gamma: {gamma || ""}°</p>
 					{/* <p>{compassAlpha || "Compass Alpha"}°</p> */}
 
 					{!compass && (
@@ -56,10 +58,13 @@ export default function Home() {
 														// );
 														var compassHeading =
 															event.webkitCompassHeading;
-
 														setCompass(
 															compassHeading.toFixed()
 														);
+
+														var gammaVal =
+															event.gama;
+														setGama(gammaVal);
 													}
 												);
 											}
@@ -71,8 +76,6 @@ export default function Home() {
 							Allow Orientation
 						</ion-button>
 					)}
-					{console.log(compass - sunPos?.azimuth)}
-					<p onClick={() => setCompass((prev) => prev - 1)}>+</p>
 
 					<div
 						style={{
