@@ -143,7 +143,6 @@ export default function Home() {
 									style={{
 										borderLeft: xBorderLeft,
 										borderRight: xBorderRight,
-										borderTop: yBorderTop,
 									}}
 								>
 									<Sun
@@ -155,7 +154,12 @@ export default function Home() {
 									/>
 								</SunContainer>
 
-								<SunContainer y>
+								<SunContainer
+									y
+									style={{
+										borderTop: yBorderTop,
+									}}
+								>
 									<Sun
 										style={{
 											marginBottom:
