@@ -5,7 +5,7 @@ import IonSearchbar from "../components/IonSearchbar";
 
 export default function Home() {
 	const [search, setSearch] = useState("");
-	const [compassAlpha, setCompassAlpha] = useState();
+	// const [compassAlpha, setCompassAlpha] = useState();
 	const [compass, setCompass] = useState()
 	const [sunPos, setSunPos] = useState();
 
@@ -65,14 +65,14 @@ export default function Home() {
 										window.addEventListener(
 											"deviceorientation",
 											function (event) {
-												var alpha = event.alpha; // ángulo en grados respecto al norte
-												setCompassAlpha(
-													360 - alpha.toFixed()
-												);
+												// var alpha = event.alpha; 
+												// setCompassAlpha(
+												// 	360 - alpha.toFixed()
+												// );
 												var compassHeading =
 													event.webkitCompassHeading;
 
-												setCompass(compassHeading)
+												setCompass(compassHeading.toFixed())
 											}
 										);
 									}
@@ -91,12 +91,12 @@ export default function Home() {
 				<br />
 				<br />
 
-				<p>{compassAlpha || "Compass Alpha"}°</p>
+				{/* <p>{compassAlpha || "Compass Alpha"}°</p> */}
 				<p>{compass || "Compass"}°</p>
 
 				{sunPos &&
-					compassAlpha &&
-					Math.abs(compassAlpha - sunPos.azimuth) < 5 && <Sun />}
+					compass &&
+					Math.abs(compass - sunPos.azimuth) < 5 && <Sun />}
 			</ion-content>
 		</>
 	);
