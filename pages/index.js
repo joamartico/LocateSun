@@ -82,13 +82,13 @@ export default function Home() {
 															event.beta;
 														setBeta(betaVal);
 
-														if(compass - 45 > sunPos?.azimuth) {
+														if(compassHeading - 45 > sunPos?.azimuth) {
 															setBorderLeft('3px solid yellow')
 															xContRef.current.style.borderLeft = "3px solid yellow";
 														} else {
 															setBorderLeft('')
 														}
-														if(compass + 45 < sunPos?.azimuth) {
+														if(compassHeading + 45 < sunPos?.azimuth) {
 															xContRef.current.style.borderRight = "3px solid yellow";
 															setBorderRight('3px solid yellow')
 														} else {
