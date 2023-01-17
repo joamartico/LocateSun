@@ -5,6 +5,8 @@ import IonSearchbar from "../components/IonSearchbar";
 
 export default function Home() {
 	const [search, setSearch] = useState("");
+	const [compassAlpha, setCompassAlpha] = useState();
+	const [sunPos, setSunPos] = useState();
 
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(function (position) {
@@ -13,6 +15,7 @@ export default function Home() {
 			var date = new Date();
 			const sunPos = SunCalc.getPosition(date, lat, lng);
 			console.log(sunPos);
+			setSunPos(sunPos);
 		});
 	}, []);
 
@@ -44,7 +47,7 @@ export default function Home() {
 					</ion-toolbar>
 				</ion-header>
 
-				<button
+				<ion-button
 					onClick={() => {
 						if (
 							typeof DeviceOrientationEvent.requestPermission ===
@@ -56,7 +59,10 @@ export default function Home() {
 									if (permissionState === "granted") {
 										window.addEventListener(
 											"deviceorientation",
-											handleOrientation
+											function (event) {
+												var alpha = event.alpha; // ángulo en grados respecto al norte
+												setCompassAlpha(alpha);
+											}
 										);
 									}
 								})
@@ -65,7 +71,16 @@ export default function Home() {
 					}}
 				>
 					Allow Orientation
-				</button>
+				</ion-button>
+
+				<p>Sun: Altitude: {sunPos.altitude}</p>
+				<p>Sun Angle: {sunPos.azimuth}°</p>
+
+				<br/>
+				<br/>
+				<br/>
+
+				<p>{compassAlpha}</p>
 			</ion-content>
 		</>
 	);
