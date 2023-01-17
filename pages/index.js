@@ -109,5 +109,5 @@ const Sun = styled.div`
 	background: #ff0;
 	/* margin: auto; */
 	border-radius: 100%;
-	/* transition: all 0.2s ease-in-out; */
+	transition: margin 0.1s ease-in-out;
 `;
