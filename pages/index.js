@@ -4,7 +4,7 @@ import SunCalc from "suncalc";
 
 export default function Home() {
 	// const [compassAlpha, setCompassAlpha] = useState();
-	const [compass, setCompass] = useState();
+	const [compass, setCompass] = useState(278);
 	const [sunPos, setSunPos] = useState();
 
 	useEffect(() => {
@@ -31,7 +31,7 @@ export default function Home() {
 					</ion-toolbar>
 				</ion-header>
 
-				<div class="ion-padding">
+				<div class="ion-padding" style={{ background: "" }}>
 					<p>Sun: Altitude: {sunPos?.altitude}</p>
 					<p>Sun Angle: {sunPos?.azimuth}°</p>
 					<p>{compass || "Compass"}°</p>
@@ -71,10 +71,28 @@ export default function Home() {
 							Allow Orientation
 						</ion-button>
 					)}
+					{console.log(compass - sunPos?.azimuth)}
+					<p onClick={() => setCompass((prev) => prev - 1)}>+</p>
 
-					{sunPos &&
-						compass &&
-						Math.abs(compass - sunPos.azimuth) < 5 && <Sun />}
+					<div
+						style={{
+							width: "100%",
+							background: "",
+							display: "flex",
+							justifyContent: "center",
+						}}
+					>
+						{sunPos &&
+							compass &&
+							Math.abs(compass - sunPos.azimuth) < 20 && (
+								<Sun
+									style={{
+										marginLeft:
+											-(compass - sunPos.azimuth) * 100,
+									}}
+								/>
+							)}
+					</div>
 				</div>
 			</ion-content>
 		</>
@@ -85,6 +103,7 @@ const Sun = styled.div`
 	height: 150px;
 	width: 150px;
 	background: #ff0;
-	margin: auto;
+	/* margin: auto; */
 	border-radius: 100%;
+	transition: all 0.2s ease-in-out;
 `;
