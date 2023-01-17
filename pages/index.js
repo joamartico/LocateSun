@@ -4,8 +4,8 @@ import SunCalc from "suncalc";
 
 export default function Home() {
 	const [sunPos, setSunPos] = useState();
-	const [compass, setCompass] = useState(1);
-	const [beta, setBeta] = useState(1);
+	const [compass, setCompass] = useState();
+	const [beta, setBeta] = useState();
 	const [lockX, setLockX] = useState(false);
 	const xContRef = useRef();
 	const yContRef = useRef();
