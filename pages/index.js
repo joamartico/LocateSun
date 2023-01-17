@@ -63,7 +63,7 @@ export default function Home() {
 														);
 
 														var gammaVal =
-															event.gama;
+															event.beta;
 														setGama(gammaVal);
 													}
 												);
@@ -91,7 +91,7 @@ export default function Home() {
 								<Sun
 									style={{
 										marginLeft:
-											-(compass - sunPos.azimuth) * 100,
+											-(compass - sunPos.azimuth) * 10,
 									}}
 								/>
 							)}
