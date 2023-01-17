@@ -4,10 +4,10 @@ import SunCalc from "suncalc";
 
 export default function Home() {
 	// const [compassAlpha, setCompassAlpha] = useState();
-	const [compass, setCompass] = useState();
+	const [compass, setCompass] = useState(263);
 	const [sunPos, setSunPos] = useState();
 	const [gamma, setGamma] = useState();
-	const [beta, setBeta] = useState();
+	const [beta, setBeta] = useState(117);
 	const [lockX, setLockX] = useState(false);
 
 	useEffect(() => {
@@ -36,7 +36,7 @@ export default function Home() {
 					<p>Sun Altitude: {sunPos?.altitude.toFixed()}</p>
 					<p>Sun Angle: {sunPos?.azimuth.toFixed()}°</p>
 					<p>Compass: {compass?.toFixed() || ""}°</p>
-					<p>Gamma: {gamma?.toFixed() || ""}°</p>
+					{/* <p>Gamma: {gamma?.toFixed() || ""}°</p> */}
 					<p>Beta: {beta?.toFixed() || ""}°</p>
 					{/* <p>Altitude: {altitude || ""}</p> */}
 					{/* <p>{compassAlpha || "Compass Alpha"}°</p> */}
@@ -54,7 +54,10 @@ export default function Home() {
 												window.addEventListener(
 													"deviceorientation",
 													function (event) {
-														console.log('deviceorientation event: ', event)
+														console.log(
+															"deviceorientation event: ",
+															event
+														);
 														// var alpha = event.alpha;
 														// setCompassAlpha(
 														// 	360 - alpha.toFixed()
@@ -65,10 +68,12 @@ export default function Home() {
 															compassHeading
 														);
 
-														var gammaVal = event.gamma;
+														var gammaVal =
+															event.gamma;
 														setGamma(gammaVal);
 
-														var betaVal = event.beta;
+														var betaVal =
+															event.beta;
 														setBeta(betaVal);
 													}
 												);
@@ -85,20 +90,30 @@ export default function Home() {
 					<div
 						style={{
 							width: "100%",
-							background: "",
+							height: "100%",
 							display: "flex",
 							justifyContent: "center",
+							alignItems: "center",
 						}}
 					>
 						{
 							sunPos && compass && (
-								// Math.abs(compass - sunPos.azimuth) < 20 && (
-								<Sun
-									style={{
-										marginLeft:
-											-(compass - sunPos.azimuth) * 10,
-									}}
-								/>
+								<>
+									<Sun
+										style={{
+											marginLeft:
+												-(compass - sunPos.azimuth) *
+												10,
+										}}
+									/>
+									<Sun
+										style={{
+											marginBottom:
+												-(beta - sunPos.altitude) *
+												10,
+										}}
+									/>
+								</>
 							)
 							// )
 						}
@@ -118,8 +133,11 @@ export default function Home() {
 const Sun = styled.div`
 	height: 150px;
 	width: 150px;
-	background: #ff0;
-	/* margin: auto; */
+	background: #ff0c;
 	border-radius: 100%;
 	transition: margin 0.1s ease-in-out;
+	position: absolute;
+	z-index: 9;
+	/* top: 350px; */
+
 `;
