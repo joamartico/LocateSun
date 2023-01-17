@@ -81,13 +81,13 @@ export default function Home() {
 														setBeta(betaVal);
 
 														if(compass - 45 > sunPos?.azimuth) {
-															xContRef.style.borderLeft = "3px solid yellow";
+															xContRef.current.style.borderLeft = "3px solid yellow";
 														}
 														if(compass + 45 < sunPos?.azimuth) {
-															xContRef.style.borderRight = "3px solid yellow";
+															xContRef.current.style.borderRight = "3px solid yellow";
 														}
 														if (beta + 100 < sunPos.altitude) {
-															yContRef.style.borderTop = "3px solid yellow";
+															yContRef.current.style.borderTop = "3px solid yellow";
 														}
 													}
 												);
