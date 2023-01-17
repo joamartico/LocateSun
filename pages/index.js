@@ -70,10 +70,6 @@ export default function Home() {
 												window.addEventListener(
 													"deviceorientation",
 													function (event) {
-														console.log(
-															"deviceorientation event: ",
-															event
-														);
 														var compassHeading =
 															event.webkitCompassHeading;
 														setCompass(
@@ -84,18 +80,14 @@ export default function Home() {
 															event.beta;
 														setBeta(betaVal);
 
-														if (
-															compass - 45 >
-															sunPos?.azimuth
-														) {
+														if(compass - 45 > sunPos?.azimuth) {
 															xContRef.style.borderLeft = "3px solid yellow";
 														}
-														if (
-															compass + 45 <
-															sunPos?.azimuth
-														) {
+														if(compass + 45 < sunPos?.azimuth) {
 															xContRef.style.borderRight = "3px solid yellow";
-
+														}
+														if (beta + 100 < sunPos.altitude) {
+															yContRef.style.borderTop = "3px solid yellow";
 														}
 													}
 												);
