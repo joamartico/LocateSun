@@ -31,53 +31,50 @@ export default function Home() {
 					</ion-toolbar>
 				</ion-header>
 
-				<ion-button
-					onClick={() => {
-						if (
-							typeof DeviceOrientationEvent.requestPermission ===
-							"function"
-						) {
-							DeviceOrientationEvent.requestPermission()
-								.then((permissionState) => {
-									alert(permissionState);
-									if (permissionState === "granted") {
-										window.addEventListener(
-											"deviceorientation",
-											function (event) {
-												// var alpha = event.alpha;
-												// setCompassAlpha(
-												// 	360 - alpha.toFixed()
-												// );
-												var compassHeading =
-													event.webkitCompassHeading;
+				<div class="ion-padding">
+					<p>Sun: Altitude: {sunPos?.altitude}</p>
+					<p>Sun Angle: {sunPos?.azimuth}°</p>
+					<p>{compass || "Compass"}°</p>
+					{/* <p>{compassAlpha || "Compass Alpha"}°</p> */}
 
-												setCompass(
-													compassHeading.toFixed()
-												);
-											}
-										);
-									}
-								})
-								.catch(alert);
-						}
-					}}
-				>
-					Allow Orientation
-				</ion-button>
+					{sunPos &&
+						compass &&
+						Math.abs(compass - sunPos.azimuth) < 5 && <Sun />}
 
-				<p>Sun: Altitude: {sunPos?.altitude}</p>
-				<p>Sun Angle: {sunPos?.azimuth}°</p>
+					<ion-button
+						onClick={() => {
+							if (
+								typeof DeviceOrientationEvent.requestPermission ===
+								"function"
+							) {
+								DeviceOrientationEvent.requestPermission()
+									.then((permissionState) => {
+										alert(permissionState);
+										if (permissionState === "granted") {
+											window.addEventListener(
+												"deviceorientation",
+												function (event) {
+													// var alpha = event.alpha;
+													// setCompassAlpha(
+													// 	360 - alpha.toFixed()
+													// );
+													var compassHeading =
+														event.webkitCompassHeading;
 
-				<br />
-				<br />
-				<br />
-
-				{/* <p>{compassAlpha || "Compass Alpha"}°</p> */}
-				<p>{compass || "Compass"}°</p>
-
-				{sunPos &&
-					compass &&
-					Math.abs(compass - sunPos.azimuth) < 5 && <Sun />}
+													setCompass(
+														compassHeading.toFixed()
+													);
+												}
+											);
+										}
+									})
+									.catch(alert);
+							}
+						}}
+					>
+						Allow Orientation
+					</ion-button>
+				</div>
 			</ion-content>
 		</>
 	);

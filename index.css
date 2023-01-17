@@ -6,8 +6,16 @@ ion-select {
     width: 100%;
 }
 
+* {
+
+    color: #ffffff !important;
+    font-weight: 900;
+    font-size: large;
+}
 
 :root {
+    --ion-background-color: #2668BA !important;
+
     /** primary **/
     --ion-color-primary: #3880ff;
     --ion-color-primary-rgb: 2,136,209;
