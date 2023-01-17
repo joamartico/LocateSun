@@ -7,10 +7,9 @@ export default function Home() {
 	const [compass, setCompass] = useState();
 	const [beta, setBeta] = useState();
 	const [lockX, setLockX] = useState(false);
-	const xContRef = useRef();
-	const yContRef = useRef();
-	const [borderLeft, setBorderLeft] = useState()
-	const [borderRight, setBorderRight] = useState()
+	const [xBorderLeft, setXBorderLeft] = useState();
+	const [xBorderRight, setXBorderRight] = useState();
+	const [yBorderTop, setYBorderTop] = useState();
 
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(function (position) {
@@ -82,21 +81,38 @@ export default function Home() {
 															event.beta;
 														setBeta(betaVal);
 
-														if(compassHeading - 45 > sunPos?.azimuth) {
-															setBorderLeft('3px solid yellow')
-															xContRef.current.style.borderLeft = "3px solid yellow";
+														if (
+															compassHeading -
+																45 >
+															sunPos?.azimuth
+														) {
+															setXBorderLeft(
+																"5px solid yellow"
+															);
 														} else {
-															setBorderLeft('')
+															setXBorderLeft("");
 														}
-														if(compassHeading + 45 < sunPos?.azimuth) {
-															xContRef.current.style.borderRight = "3px solid yellow";
-															setBorderRight('3px solid yellow')
+														if (
+															compassHeading +
+																45 <
+															sunPos?.azimuth
+														) {
+															setXBorderRight(
+																"5px solid yellow"
+															);
 														} else {
-															setBorderRight('')
+															setXBorderRight("");
 														}
-														// if (beta + 100 < sunPos.altitude) {
-														// 	yContRef.current.style.borderTop = "3px solid yellow";
-														// }
+														if (
+															betaVal + 100 <
+															sunPos.altitude
+														) {
+															setYBorderTop(
+																"5px solid yellow"
+															);
+														} else {
+															setYBorderTop("");
+														}
 													}
 												);
 											}
@@ -124,10 +140,10 @@ export default function Home() {
 							<>
 								<SunContainer
 									x
-									ref={xContRef}
 									style={{
-										borderLeft: borderLeft,
-										borderRight: borderRight
+										borderLeft: xBorderLeft,
+										borderRight: xBorderRight,
+										borderTop: yBorderTop,
 									}}
 								>
 									<Sun
@@ -139,10 +155,7 @@ export default function Home() {
 									/>
 								</SunContainer>
 
-								<SunContainer
-									y
-									ref={yContRef}
-								>
+								<SunContainer y>
 									<Sun
 										style={{
 											marginBottom:
