@@ -7,6 +7,8 @@ export default function Home() {
 	const [compass, setCompass] = useState();
 	const [sunPos, setSunPos] = useState();
 	const [gamma, setGamma] = useState();
+	const [lockX, setLockX] = useState(false);
+	const [altitude, setAltitude] = useState()
 
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(function (position) {
@@ -15,10 +17,7 @@ export default function Home() {
 			console.log("my position: ", lat, lng);
 			var date = new Date();
 			const sunPos = SunCalc.getPosition(date, lat, lng);
-			const fixedAzimuth = (
-				(sunPos.azimuth * 180) / Math.PI +
-				180
-			);
+			const fixedAzimuth = (sunPos.azimuth * 180) / Math.PI + 180;
 			setSunPos({ altitude: sunPos.altitude, azimuth: fixedAzimuth });
 		});
 	}, []);
@@ -37,6 +36,7 @@ export default function Home() {
 					<p>Sun Angle: {sunPos?.azimuth.toFixed()}°</p>
 					<p>Compass: {compass?.toFixed() || ""}°</p>
 					<p>Gamma: {gamma || ""}°</p>
+					<p>Altitude: {altitude || ""}</p>
 					{/* <p>{compassAlpha || "Compass Alpha"}°</p> */}
 
 					{!compass && (
@@ -67,6 +67,25 @@ export default function Home() {
 														setGama(gammaVal);
 													}
 												);
+
+												window.addEventListener(
+													"devicemotion",
+													(event) => {
+														var heading =
+															event.rotationRate
+																.alpha;
+														var altitudeVal =
+															event.rotationRate
+																.beta;
+														setAltitude(altitudeVal)
+														console.log(
+															"Heading: " +
+																heading +
+																" Altitude: " +
+																altitudeVal
+														);
+													}
+												);
 											}
 										})
 										.catch(alert);
@@ -85,18 +104,25 @@ export default function Home() {
 							justifyContent: "center",
 						}}
 					>
-						{sunPos &&
-							compass &&
-							// Math.abs(compass - sunPos.azimuth) < 20 && (
+						{
+							sunPos && compass && (
+								// Math.abs(compass - sunPos.azimuth) < 20 && (
 								<Sun
 									style={{
 										marginLeft:
 											-(compass - sunPos.azimuth) * 10,
 									}}
 								/>
-							// ) 
-							}
+							)
+							// )
+						}
 					</div>
+
+					{compass && (
+						<ion-button onClick={() => setLockX((prev) => !prev)}>
+							{lockX ? "Unlock X" : "Lock X"}
+						</ion-button>
+					)}
 				</div>
 			</ion-content>
 		</>
