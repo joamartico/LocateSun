@@ -9,7 +9,6 @@ export default function Home() {
 	const [gamma, setGamma] = useState();
 	const [beta, setBeta] = useState();
 	const [lockX, setLockX] = useState(false);
-	const [altitude, setAltitude] = useState()
 
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(function (position) {
@@ -19,7 +18,8 @@ export default function Home() {
 			var date = new Date();
 			const sunPos = SunCalc.getPosition(date, lat, lng);
 			const fixedAzimuth = (sunPos.azimuth * 180) / Math.PI + 180;
-			setSunPos({ altitude: sunPos.altitude, azimuth: fixedAzimuth });
+			const fixedAltitude = (sunPos.altitude * 180) / Math.PI + 180;
+			setSunPos({ altitude: fixedAltitude, azimuth: fixedAzimuth });
 		});
 	}, []);
 
@@ -36,8 +36,8 @@ export default function Home() {
 					<p>Sun Altitude: {sunPos?.altitude.toFixed()}</p>
 					<p>Sun Angle: {sunPos?.azimuth.toFixed()}°</p>
 					<p>Compass: {compass?.toFixed() || ""}°</p>
-					<p>Gamma: {gamma || ""}°</p>
-					<p>Beta: {beta || ""}°</p>
+					<p>Gamma: {gamma?.toFixed() || ""}°</p>
+					<p>Beta: {beta?.toFixed() || ""}°</p>
 					{/* <p>Altitude: {altitude || ""}</p> */}
 					{/* <p>{compassAlpha || "Compass Alpha"}°</p> */}
 
@@ -70,25 +70,6 @@ export default function Home() {
 
 														var betaVal = event.beta;
 														setBeta(betaVal);
-													}
-												);
-
-												window.addEventListener(
-													"devicemotion",
-													(event) => {
-														var heading =
-															event.rotationRate
-																.alpha;
-														var altitudeVal =
-															event.rotationRate
-																.beta;
-														setAltitude(altitudeVal)
-														console.log(
-															"Heading: " +
-																heading +
-																" Altitude: " +
-																altitudeVal
-														);
 													}
 												);
 											}
