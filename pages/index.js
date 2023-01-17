@@ -18,7 +18,7 @@ export default function Home() {
 			const fixedAzimuth = (
 				(sunPos.azimuth * 180) / Math.PI +
 				180
-			).toFixed();
+			);
 			setSunPos({ altitude: sunPos.altitude, azimuth: fixedAzimuth });
 		});
 	}, []);
@@ -32,10 +32,10 @@ export default function Home() {
 					</ion-toolbar>
 				</ion-header>
 
-				<div class="ion-padding" style={{ background: "" }}>
-					<p>Sun: Altitude: {sunPos?.altitude}</p>
-					<p>Sun Angle: {sunPos?.azimuth}°</p>
-					<p>Compass: {compass || ""}°</p>
+				<div style={{ background: "" }}>
+					<p>Sun: Altitude: {sunPos?.altitude.toFixed()}</p>
+					<p>Sun Angle: {sunPos?.azimuth.toFixed()}°</p>
+					<p>Compass: {compass?.toFixed() || ""}°</p>
 					<p>Gamma: {gamma || ""}°</p>
 					{/* <p>{compassAlpha || "Compass Alpha"}°</p> */}
 
@@ -59,7 +59,7 @@ export default function Home() {
 														var compassHeading =
 															event.webkitCompassHeading;
 														setCompass(
-															compassHeading.toFixed()
+															compassHeading
 														);
 
 														var gammaVal =
@@ -87,14 +87,15 @@ export default function Home() {
 					>
 						{sunPos &&
 							compass &&
-							Math.abs(compass - sunPos.azimuth) < 20 && (
+							// Math.abs(compass - sunPos.azimuth) < 20 && (
 								<Sun
 									style={{
 										marginLeft:
 											-(compass - sunPos.azimuth) * 10,
 									}}
 								/>
-							)}
+							// ) 
+							}
 					</div>
 				</div>
 			</ion-content>
@@ -108,5 +109,5 @@ const Sun = styled.div`
 	background: #ff0;
 	/* margin: auto; */
 	border-radius: 100%;
-	transition: all 0.2s ease-in-out;
+	/* transition: all 0.2s ease-in-out; */
 `;
