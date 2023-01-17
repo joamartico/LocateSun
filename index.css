@@ -14,7 +14,7 @@ ion-select {
 }
 
 :root {
-    --ion-background-color: #2668BA !important;
+    --ion-background-color: #2668BA;
 
     /** primary **/
     --ion-color-primary: #3880ff;

@@ -3,10 +3,9 @@ import styled from "styled-components";
 import SunCalc from "suncalc";
 
 export default function Home() {
-	// const [compassAlpha, setCompassAlpha] = useState();
-	const [compass, setCompass] = useState();
 	const [sunPos, setSunPos] = useState();
 	const [gamma, setGamma] = useState();
+	const [compass, setCompass] = useState();
 	const [beta, setBeta] = useState();
 	const [lockX, setLockX] = useState(false);
 
@@ -32,14 +31,21 @@ export default function Home() {
 					</ion-toolbar>
 				</ion-header>
 
-				<div style={{ background: "" }}>
-					<p>Sun Altitude: {sunPos?.altitude.toFixed()}</p>
-					<p>Sun Angle: {sunPos?.azimuth.toFixed()}°</p>
-					<p>Compass: {compass?.toFixed() || ""}°</p>
+				<div style={{ background: "", position: "absolute" }}>
+					<p>Sun X: {sunPos?.azimuth.toFixed()}°</p>
+					<p>Sun Y: {sunPos?.altitude.toFixed()}°</p>
+					<br/>
+					<p>Your X: {compass?.toFixed() || ""}°</p>
+					<p>Your Y: {beta?.toFixed() || ""}°</p>
 					{/* <p>Gamma: {gamma?.toFixed() || ""}°</p> */}
-					<p>Beta: {beta?.toFixed() || ""}°</p>
 					{/* <p>Altitude: {altitude || ""}</p> */}
 					{/* <p>{compassAlpha || "Compass Alpha"}°</p> */}
+
+					{/* {compass && (
+						<ion-button onClick={() => setLockX((prev) => !prev)}>
+							{lockX ? "Unlock X" : "Lock X"}
+						</ion-button>
+					)} */}
 
 					{!compass && (
 						<ion-button
@@ -86,19 +92,21 @@ export default function Home() {
 							Allow Orientation
 						</ion-button>
 					)}
+				</div>
 
-					<div
-						style={{
-							width: "100%",
-							height: "100%",
-							display: "flex",
-							justifyContent: "center",
-							alignItems: "center",
-						}}
-					>
-						{
-							sunPos && compass && (
-								<>
+				<div
+					style={{
+						width: "100%",
+						height: "100%",
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+					}}
+				>
+					{
+						sunPos && compass && (
+							<>
+								<SunContainer x>
 									<Sun
 										style={{
 											marginLeft:
@@ -106,6 +114,9 @@ export default function Home() {
 												10,
 										}}
 									/>
+								</SunContainer>
+
+								<SunContainer y>
 									<Sun
 										style={{
 											marginBottom:
@@ -113,17 +124,11 @@ export default function Home() {
 												10,
 										}}
 									/>
-								</>
-							)
-							// )
-						}
-					</div>
-
-					{compass && (
-						<ion-button onClick={() => setLockX((prev) => !prev)}>
-							{lockX ? "Unlock X" : "Lock X"}
-						</ion-button>
-					)}
+								</SunContainer>
+							</>
+						)
+						// )
+					}
 				</div>
 			</ion-content>
 		</>
@@ -133,11 +138,20 @@ export default function Home() {
 const Sun = styled.div`
 	height: 150px;
 	width: 150px;
-	background: #ff0c;
-	border-radius: 100%;
+	background: #ff0b;
+	border-radius: 50%;
 	transition: margin 0.1s ease-in-out;
-	position: absolute;
 	z-index: 9;
 	/* top: 350px; */
+`;
 
+const SunContainer = styled.div`
+	width: ${({ x }) => (x ? "100%" : "155px")};
+	height: ${({ y }) => (y ? "100%" : "155px")};
+	border: 1px solid #aaaa;
+	z-index: 999;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
 `;
