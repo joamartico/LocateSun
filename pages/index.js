@@ -52,6 +52,7 @@ export default function Home() {
 												window.addEventListener(
 													"deviceorientation",
 													function (event) {
+														console.log('deviceorientation event: ', event)
 														// var alpha = event.alpha;
 														// setCompassAlpha(
 														// 	360 - alpha.toFixed()
