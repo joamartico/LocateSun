@@ -37,43 +37,44 @@ export default function Home() {
 					<p>{compass || "Compass"}°</p>
 					{/* <p>{compassAlpha || "Compass Alpha"}°</p> */}
 
+					{!compass && (
+						<ion-button
+							onClick={() => {
+								if (
+									typeof DeviceOrientationEvent.requestPermission ===
+									"function"
+								) {
+									DeviceOrientationEvent.requestPermission()
+										.then((permissionState) => {
+											if (permissionState === "granted") {
+												window.addEventListener(
+													"deviceorientation",
+													function (event) {
+														// var alpha = event.alpha;
+														// setCompassAlpha(
+														// 	360 - alpha.toFixed()
+														// );
+														var compassHeading =
+															event.webkitCompassHeading;
+
+														setCompass(
+															compassHeading.toFixed()
+														);
+													}
+												);
+											}
+										})
+										.catch(alert);
+								}
+							}}
+						>
+							Allow Orientation
+						</ion-button>
+					)}
+
 					{sunPos &&
 						compass &&
 						Math.abs(compass - sunPos.azimuth) < 5 && <Sun />}
-
-					<ion-button
-						onClick={() => {
-							if (
-								typeof DeviceOrientationEvent.requestPermission ===
-								"function"
-							) {
-								DeviceOrientationEvent.requestPermission()
-									.then((permissionState) => {
-										alert(permissionState);
-										if (permissionState === "granted") {
-											window.addEventListener(
-												"deviceorientation",
-												function (event) {
-													// var alpha = event.alpha;
-													// setCompassAlpha(
-													// 	360 - alpha.toFixed()
-													// );
-													var compassHeading =
-														event.webkitCompassHeading;
-
-													setCompass(
-														compassHeading.toFixed()
-													);
-												}
-											);
-										}
-									})
-									.catch(alert);
-							}
-						}}
-					>
-						Allow Orientation
-					</ion-button>
 				</div>
 			</ion-content>
 		</>
