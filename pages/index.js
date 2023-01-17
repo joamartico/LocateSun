@@ -12,10 +12,11 @@ export default function Home() {
 		navigator.geolocation.getCurrentPosition(function (position) {
 			var lat = position.coords.latitude;
 			var lng = position.coords.longitude;
+			console.log('my position: ', lat, lng)
 			var date = new Date();
 			const sunPos = SunCalc.getPosition(date, lat, lng);
-			console.log(sunPos);
-			setSunPos(sunPos);
+			const fixedAzimuth = (sunPos.azimuth * 180/(Math.PI) + 180).toFixed()
+			setSunPos({altitude: sunPos.altitude, azimuth: fixedAzimuth});
 		});
 	}, []);
 
@@ -61,7 +62,7 @@ export default function Home() {
 											"deviceorientation",
 											function (event) {
 												var alpha = event.alpha; // ángulo en grados respecto al norte
-												setCompassAlpha(alpha);
+												setCompassAlpha(alpha.toFixed());
 											}
 										);
 									}
@@ -81,7 +82,19 @@ export default function Home() {
 				<br/>
 
 				<p>{compassAlpha || 'Compass Alpha'}</p>
+
+				{sunPos && compassAlpha && Math.abs(compassAlpha - sunPos.azimuth) < 5  && <Sun />}
+				
 			</ion-content>
 		</>
 	);
 }
+
+
+const Sun = styled.div`
+	height: 150px;
+	width: 150px;
+	background: #ff0;
+	margin: auto;
+	border-radius: 100%;
+`;
