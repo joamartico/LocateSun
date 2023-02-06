@@ -22,7 +22,7 @@ export default function Home() {
 			.getUserMedia({video: true, audio: false})
 			.then((stream) => {
 				let video = videoRef.current;
-				alert(stream)
+				console.log(stream)
 				video.srcObject = stream;
 				video.play();
 			})
@@ -248,11 +248,10 @@ const CameraButton = styled.div`
 const CameraVideo = styled.video`
 	position: fixed;
 	top: 0;
-	right: 0;
+	left: 0;
 	/* left: 50%; */
 	/* transform: translate(-50%); */
-	height: 30vh;
-	width: 30vh;
-	z-index: 99999999;
-	background: #f008;
+	height: 100vh;
+	width: auto;
+	/* z-index: 99999999; */
 `;
