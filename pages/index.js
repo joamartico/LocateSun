@@ -58,7 +58,9 @@ export default function Home() {
 	return (
 		<>
 			<ion-content fullscreen>
-				<CameraVideo ref={videoRef} style={{opacity: camera ? 1 : 0}} />
+				<CameraVideo ref={videoRef} 
+				// style={{opacity: camera ? 1 : 0}} 
+				/>
 
 				{/* <ion-header collapse="condense" translucent>
 					<ion-toolbar>
@@ -250,13 +252,12 @@ const CameraButton = styled.div`
 
 const CameraVideo = styled.video`
 	position: fixed;
-	top: 0;
+	bottom: 0;
 	left: 0;
 	/* left: 50%; */
 	/* transform: translate(-50%); */
-	height: 100vh;
+	height: 20vh;
 	width: auto;
-	z-index: 999;
-	opacity: 0.8;
+	z-index: 9999;
 	background: #f008;
 `;
