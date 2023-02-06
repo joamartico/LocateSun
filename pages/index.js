@@ -1,10 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-	Camera,
-	CameraResultType,
-	CameraSource,
-	Photo,
-} from "@capacitor/camera";
+
 import styled from "styled-components";
 import SunCalc from "suncalc";
 
@@ -248,6 +243,9 @@ const CameraButton = styled.div`
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
+	&:active {
+		opacity: 0.7;
+	}
 `;
 
 const CameraVideo = styled.video`
