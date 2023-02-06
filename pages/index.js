@@ -251,8 +251,9 @@ const CameraButton = styled.div`
 const CameraVideo = styled.video`
 	position: fixed;
 	top: 0;
-	left: 50%;
-	transform: translate(-50%);
+	left: 0;
+	/* left: 50%; */
+	/* transform: translate(-50%); */
 	height: 100vh;
 	width: auto;
 	z-index: 999;
