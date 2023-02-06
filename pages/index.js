@@ -19,10 +19,10 @@ export default function Home() {
 		setCamera((prev) => !prev);
 
 		navigator.mediaDevices
-			.getUserMedia({video: true})
+			.getUserMedia({video: true, audio: false})
 			.then((stream) => {
 				let video = videoRef.current;
-				console.log(video);
+				alert(stream)
 				video.srcObject = stream;
 				video.play();
 			})
@@ -247,12 +247,12 @@ const CameraButton = styled.div`
 
 const CameraVideo = styled.video`
 	position: fixed;
-	bottom: 0;
-	left: 0;
+	top: 0;
+	right: 0;
 	/* left: 50%; */
 	/* transform: translate(-50%); */
-	height: 20vh;
-	width: auto;
-	z-index: 9999999;
+	height: 30vh;
+	width: 30vh;
+	z-index: 99999999;
 	background: #f008;
 `;
