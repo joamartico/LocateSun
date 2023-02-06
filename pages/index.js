@@ -19,10 +19,10 @@ export default function Home() {
 		setCamera((prev) => !prev);
 
 		navigator.mediaDevices
-			.getUserMedia({video: true, audio: false})
+			.getUserMedia({ video: true, audio: false })
 			.then((stream) => {
 				let video = videoRef.current;
-				console.log(stream)
+				console.log(stream);
 				video.srcObject = stream;
 				video.play();
 			})
@@ -53,10 +53,14 @@ export default function Home() {
 
 	return (
 		<>
-			<CameraVideo ref={videoRef} muted autoPlay={true} playsInline={true}
-				// style={{opacity: camera ? 1 : 0}} 
-				/>
 			<ion-content fullscreen>
+				<CameraVideo
+					ref={videoRef}
+					muted
+					autoPlay={true}
+					playsInline={true}
+					style={{opacity: camera ? 1 : 0}}
+				/>
 				{/* <ion-header collapse="condense" translucent>
 					<ion-toolbar>
 						<ion-title size="large">SunLocate</ion-title>
@@ -253,5 +257,4 @@ const CameraVideo = styled.video`
 	/* transform: translate(-50%); */
 	height: 100vh;
 	width: auto;
-	/* z-index: 99999999; */
 `;
