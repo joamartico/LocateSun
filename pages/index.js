@@ -26,7 +26,7 @@ export default function Home() {
 				video.srcObject = stream;
 				video.play();
 			})
-			.catch((err) => alert(err));
+			.catch((err) => console.log(err));
 	};
 
 	useEffect(() => {
@@ -53,7 +53,7 @@ export default function Home() {
 
 	return (
 		<>
-			<CameraVideo ref={videoRef} muted autoplay playsinline
+			<CameraVideo ref={videoRef} muted autoPlay={true} playsInline={true}
 				// style={{opacity: camera ? 1 : 0}} 
 				/>
 			<ion-content fullscreen>
