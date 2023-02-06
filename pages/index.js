@@ -19,7 +19,10 @@ export default function Home() {
 		setCamera((prev) => !prev);
 
 		navigator.mediaDevices
-			.getUserMedia({ video: true, audio: false })
+			.getUserMedia({
+				video: { facingMode: "environment" },
+				audio: false,
+			})
 			.then((stream) => {
 				let video = videoRef.current;
 				console.log(stream);
@@ -59,7 +62,7 @@ export default function Home() {
 					muted
 					autoPlay={true}
 					playsInline={true}
-					style={{opacity: camera ? 1 : 0}}
+					style={{ opacity: camera ? 1 : 0 }}
 				/>
 				{/* <ion-header collapse="condense" translucent>
 					<ion-toolbar>
