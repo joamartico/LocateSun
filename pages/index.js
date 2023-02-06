@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import styled from "styled-components";
 import SunCalc from "suncalc";
+import CameraPreview from "../components/CameraPreview";
 
 export default function Home() {
 	const [sunPos, setSunPos] = useState();
@@ -15,13 +16,10 @@ export default function Home() {
 	const videoRef = useRef();
 
 	const getVideo = () => {
-		setCamera(prev => !prev)
+		setCamera((prev) => !prev);
 
 		navigator.mediaDevices
-			.getUserMedia({
-				video: { facingMode: 'environment' },
-				audio: false,
-			})
+			.getUserMedia({video: true})
 			.then((stream) => {
 				let video = videoRef.current;
 				console.log(video);
@@ -44,8 +42,6 @@ export default function Home() {
 		});
 	}, []);
 
-	
-
 	function getBorderActiveX() {
 		if (compass - 45 > sunPos.azimuth) return "left";
 		if (compass + 45 < sunPos.azimuth) return "right";
@@ -57,11 +53,10 @@ export default function Home() {
 
 	return (
 		<>
-				<CameraVideo ref={videoRef} 
+			<CameraVideo ref={videoRef} 
 				// style={{opacity: camera ? 1 : 0}} 
 				/>
 			<ion-content fullscreen>
-
 				{/* <ion-header collapse="condense" translucent>
 					<ion-toolbar>
 						<ion-title size="large">SunLocate</ion-title>
