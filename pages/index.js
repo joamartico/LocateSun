@@ -1,4 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import {
+	Camera,
+	CameraResultType,
+	CameraSource,
+	Photo,
+} from "@capacitor/camera";
 import styled from "styled-components";
 import SunCalc from "suncalc";
 
@@ -10,6 +16,25 @@ export default function Home() {
 	const [xBorderLeft, setXBorderLeft] = useState();
 	const [xBorderRight, setXBorderRight] = useState();
 	const [yBorderTop, setYBorderTop] = useState();
+	const [camera, setCamera] = useState(false);
+	const videoRef = useRef();
+
+	const getVideo = () => {
+		setCamera(prev => !prev)
+
+		navigator.mediaDevices
+			.getUserMedia({
+				video: { width: 1920, height: 1080 },
+				audio: false,
+			})
+			.then((stream) => {
+				let video = videoRef.current;
+				console.log(video);
+				video.srcObject = stream;
+				video.play();
+			})
+			.catch((err) => console.log(err));
+	};
 
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(function (position) {
@@ -24,6 +49,8 @@ export default function Home() {
 		});
 	}, []);
 
+	
+
 	function getBorderActiveX() {
 		if (compass - 45 > sunPos.azimuth) return "left";
 		if (compass + 45 < sunPos.azimuth) return "right";
@@ -36,6 +63,8 @@ export default function Home() {
 	return (
 		<>
 			<ion-content fullscreen>
+				<CameraVideo ref={videoRef} style={{opacity: camera ? 1 : 0}} />
+
 				{/* <ion-header collapse="condense" translucent>
 					<ion-toolbar>
 						<ion-title size="large">SunLocate</ion-title>
@@ -173,6 +202,10 @@ export default function Home() {
 					}
 				</div>
 			</ion-content>
+
+			<CameraButton onClick={() => getVideo()}>
+				<ion-icon name="camera" color="medium" />
+			</CameraButton>
 		</>
 	);
 }
@@ -199,4 +232,29 @@ const SunContainer = styled.div`
 	justify-content: center;
 	align-items: center;
 	position: absolute;
+`;
+
+const CameraButton = styled.div`
+	border-radius: 50%;
+	height: 60px;
+	width: 60px;
+	background: lightgray;
+	border: 3px solid gray;
+	color: gray;
+	position: fixed;
+	right: 25px;
+	bottom: 25px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+`;
+
+const CameraVideo = styled.video`
+	position: fixed;
+	top: 0;
+	left: 50%;
+	transform: translate(-50%);
+	height: 100vh;
+	width: auto;
 `;
