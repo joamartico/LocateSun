@@ -255,4 +255,6 @@ const CameraVideo = styled.video`
 	transform: translate(-50%);
 	height: 100vh;
 	width: auto;
+	z-index: 999;
+	opacity: 0.8;
 `;
