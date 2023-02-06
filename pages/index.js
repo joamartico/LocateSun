@@ -19,7 +19,7 @@ export default function Home() {
 
 		navigator.mediaDevices
 			.getUserMedia({
-				video: { width: 1920, height: 1080 },
+				video: { facingMode: 'environment' },
 				audio: false,
 			})
 			.then((stream) => {
@@ -258,4 +258,5 @@ const CameraVideo = styled.video`
 	width: auto;
 	z-index: 999;
 	opacity: 0.8;
+	background: #f008;
 `;
