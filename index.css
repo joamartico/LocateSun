@@ -6,6 +6,12 @@ ion-select {
     width: 100%;
 }
 
+ion-toolbar {
+    background: none !important;
+    --background: none !important;
+    position: fixed;
+}
+
 * {
 
     color: #ffffff !important;

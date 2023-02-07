@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-
 import styled from "styled-components";
 import SunCalc from "suncalc";
-import CameraPreview from "../components/CameraPreview";
+import { MarsOption, MoonOption, SunOption } from "../components/planets";
+const ephemeris = require("ephemeris");
 
 export default function Home() {
 	const [sunPos, setSunPos] = useState();
@@ -12,11 +12,14 @@ export default function Home() {
 	const [xBorderLeft, setXBorderLeft] = useState();
 	const [xBorderRight, setXBorderRight] = useState();
 	const [yBorderTop, setYBorderTop] = useState();
-	const [camera, setCamera] = useState(false);
+	const [showCamera, setShowCamera] = useState(false);
+	const [showTargets, setShowTargets] = useState(false);
+	const [selectedTarget, setSelectedTarget] = useState("sun");
+
 	const videoRef = useRef();
 
 	const getVideo = () => {
-		setCamera((prev) => !prev);
+		setShowCamera((prev) => !prev);
 
 		navigator.mediaDevices
 			.getUserMedia({
@@ -36,7 +39,8 @@ export default function Home() {
 		navigator.geolocation.getCurrentPosition(function (position) {
 			var lat = position.coords.latitude;
 			var lng = position.coords.longitude;
-			console.log("my position: ", lat, lng);
+			console.log("lat: ", lat);
+			console.log("lng: ", lng);
 			var date = new Date();
 			const sunPos = SunCalc.getPosition(date, lat, lng);
 			const fixedAzimuth = (sunPos.azimuth * 180) / Math.PI + 180;
@@ -45,30 +49,50 @@ export default function Home() {
 		});
 	}, []);
 
-	function getBorderActiveX() {
-		if (compass - 45 > sunPos.azimuth) return "left";
-		if (compass + 45 < sunPos.azimuth) return "right";
-	}
-	function getBorderActiveY() {
-		if (beta + 100 < sunPos.altitude) return "top";
-		// if(compass - 100 > sunPos.altitude) return 'bottom'
-	}
-
 	return (
 		<>
 			<ion-content fullscreen>
+				<TargetSelected onClick={() => setShowTargets((prev) => !prev)}>
+					<TargetOption>
+						{selectedTarget == "sun" ? (
+							<SunOption />
+						) : selectedTarget == "moon" ? (
+							<MoonOption />
+						) : (
+							<MarsOption />
+						)}
+					</TargetOption>
+
+					{showTargets && (
+						<TargetsContainer>
+							<TargetOption
+								onClick={() => setSelectedTarget("sun")}
+							>
+								<SunOption />
+							</TargetOption>
+
+							<TargetOption
+								onClick={() => setSelectedTarget("moon")}
+							>
+								<MoonOption />
+							</TargetOption>
+
+							<TargetOption
+								onClick={() => setSelectedTarget("mars")}
+							>
+								<MarsOption />
+							</TargetOption>
+						</TargetsContainer>
+					)}
+				</TargetSelected>
+
 				<CameraVideo
 					ref={videoRef}
 					muted
 					autoPlay={true}
 					playsInline={true}
-					style={{ opacity: camera ? 1 : 0 }}
+					style={{ opacity: showCamera ? 1 : 0 }}
 				/>
-				{/* <ion-header collapse="condense" translucent>
-					<ion-toolbar>
-						<ion-title size="large">SunLocate</ion-title>
-					</ion-toolbar>
-				</ion-header> */}
 
 				<div style={{ background: "", position: "absolute" }}>
 					<p>Sun X: {sunPos?.azimuth.toFixed()}°</p>
@@ -76,15 +100,6 @@ export default function Home() {
 					<br />
 					<p>Your X: {compass?.toFixed() || ""}°</p>
 					<p>Your Y: {beta?.toFixed() || ""}°</p>
-					{/* <p>Gamma: {gamma?.toFixed() || ""}°</p> */}
-					{/* <p>Altitude: {altitude || ""}</p> */}
-					{/* <p>{compassAlpha || "Compass Alpha"}°</p> */}
-
-					{/* {compass && (
-						<ion-button onClick={() => setLockX((prev) => !prev)}>
-							{lockX ? "Unlock X" : "Lock X"}
-						</ion-button>
-					)} */}
 
 					{!compass && (
 						<ion-button
@@ -188,10 +203,11 @@ export default function Home() {
 										borderTop: yBorderTop,
 									}}
 								>
-									<Sun
+									<Target
 										style={{
 											marginBottom:
 												-(beta - sunPos.altitude) * 10,
+											background: selectedTarget == 'sun' ? 'ff0b' : selectedTarget == 'moon' ? '#fffb' : '#8B2500bb'
 										}}
 									/>
 								</SunContainer>
@@ -209,14 +225,105 @@ export default function Home() {
 	);
 }
 
-const Sun = styled.div`
+export const getServerSideProps = async ({ res, params }) => {
+	var result = ephemeris.getAllPlanets(
+		new Date(),
+		-58.653468489146036,
+		-34.651012982795315,
+		0
+	);
+	// console.log(result.observed);
+	// console.log(result.observed.sun.raw.position.altaz.topocentric)
+	console.log(
+		"sun azimuth: ",
+		result.observed.sun.raw.position.altaz.topocentric.azimuth
+	);
+	console.log(
+		"sun altitude: ",
+		90 + result.observed.sun.raw.position.altaz.topocentric.altitude
+	);
+	console.log("");
+	console.log("");
+	console.log(
+		"mars azimuth: ",
+		result.observed.mars.raw.position.altaz.topocentric.azimuth
+	);
+	console.log(
+		"mars altitude: ",
+		90 + result.observed.mars.raw.position.altaz.topocentric.altitude
+	);
+	console.log("");
+	console.log("");
+	console.log(
+		"moon azimuth: ",
+		result.observed.moon.raw.position.altaz.topocentric.azimuth
+	);
+	console.log(
+		"moon altitude: ",
+		90 + result.observed.moon.raw.position.altaz.topocentric.altitude
+	);
+
+	return {
+		props: {
+			result,
+		},
+	};
+};
+
+const TargetSelected = styled.div`
+	border: none;
+	border-radius: 14px;
+	background: #fff;
+	z-index: 99999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 42px;
+	/* width: 48px; */
+	font-weight: 500;
+	font-size: 14px;
+	/* padding: 0 10px; */
+	font-family: Roboto, sans-serif;
+	cursor: pointer;
+	position: fixed;
+	top: 15px;
+	right: 20px;
+`;
+
+const TargetsContainer = styled.div`
+	background: #fff;
+	z-index: 9999;
+	border-radius: 14px;
+	position: absolute;
+	/* padding-right: 12px; */
+	top: 0;
+	margin-top: 50px;
+	box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+`;
+
+const TargetOption = styled.div`
+	width: 100px;
+	display: flex;
+	align-items: center;
+	justify-content: left;
+	padding-left: 12px;
+	height: 48px;
+	font-weight: 500;
+	font-family: Roboto, sans-serif;
+	color: black !important;
+	font-size: 14px;
+	/* padding: 0 10px; */
+	/* width: 48px; */
+	cursor: pointer;
+`;
+
+const Target = styled.div`
 	height: 150px;
 	width: 150px;
-	background: #ff0b;
+	/* background: #ff0b; */
 	border-radius: 50%;
 	transition: margin 0.1s ease-in-out;
 	z-index: 9;
-	/* top: 350px; */
 `;
 
 const SunContainer = styled.div`
@@ -256,8 +363,6 @@ const CameraVideo = styled.video`
 	position: fixed;
 	top: 0;
 	left: 0;
-	/* left: 50%; */
-	/* transform: translate(-50%); */
 	height: 100vh;
 	width: auto;
 `;

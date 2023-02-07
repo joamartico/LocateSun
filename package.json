@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "@ionic/core": "^5.4.1",
+    "astronomia": "^4.1.1",
     "babel-plugin-styled-components": "^2.0.7",
+    "ephemeris": "^2.0.0",
     "ionicons": "^5.2.3",
     "next": "latest",
     "next-pwa": "^5.2.21",
