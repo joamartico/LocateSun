@@ -325,7 +325,7 @@ const Target = styled.div`
 	border-radius: 50%;
 	transition: margin 0.1s ease-in-out;
 	z-index: 9;
-	background: ${({ type }) => type == "sun" ? "ff0b" : type == "moon" ? "#fffb" : "#8B2500bb"};
+	background: ${({ type }) => type == "sun" ? "#ff0b" : type == "moon" ? "#fffb" : "#d60b"};
 `;
 
 const SunContainer = styled.div`
