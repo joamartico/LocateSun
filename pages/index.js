@@ -5,7 +5,7 @@ import { MarsOption, MoonOption, SunOption } from "../components/planets";
 const ephemeris = require("ephemeris");
 
 export default function Home() {
-	const [sunPos, setSunPos] = useState();
+	// const [sunPos, setSunPos] = useState();
 	const [compass, setCompass] = useState();
 	const [beta, setBeta] = useState();
 	const [xBorderLeft, setXBorderLeft] = useState();
@@ -14,6 +14,7 @@ export default function Home() {
 	const [showCamera, setShowCamera] = useState(false);
 	const [showTargets, setShowTargets] = useState(false);
 	const [selectedTarget, setSelectedTarget] = useState("sun");
+	const [positions, setPositions] = useState()
 
 	const videoRef = useRef();
 
@@ -40,11 +41,23 @@ export default function Home() {
 			var lng = position.coords.longitude;
 			console.log("lat: ", lat);
 			console.log("lng: ", lng);
-			var date = new Date();
-			const sunPos = SunCalc.getPosition(date, lat, lng);
-			const fixedAzimuth = (sunPos.azimuth * 180) / Math.PI + 180;
-			const fixedAltitude = (sunPos.altitude * 180) / Math.PI + 90;
-			setSunPos({ altitude: fixedAltitude, azimuth: fixedAzimuth });
+			// var date = new Date();
+			// const sunPos = SunCalc.getPosition(date, lat, lng);
+			// const fixedAzimuth = (sunPos.azimuth * 180) / Math.PI + 180;
+			// const fixedAltitude = (sunPos.altitude * 180) / Math.PI + 90;
+			// setSunPos({ altitude: fixedAltitude, azimuth: fixedAzimuth });
+
+			fetch(
+				"/api/getPositions?" +
+					new URLSearchParams({
+						lat,
+						lng,
+					})
+			).then(async (res) => {
+				const _positions = await res.json()
+				console.log(_positions)
+				setPositions(_positions)
+			});
 		});
 	}, []);
 
@@ -93,9 +106,9 @@ export default function Home() {
 					style={{ opacity: showCamera ? 1 : 0 }}
 				/>
 
-				<div style={{ background: "", position: "absolute" }}>
-					<p>Sun X: {sunPos?.azimuth.toFixed()}°</p>
-					<p>Sun Y: {sunPos?.altitude.toFixed()}°</p>
+				<div style={{ paddingLeft: "10px", position: "absolute", textTransform: 'capitalize' }}>
+					<p>{selectedTarget} X: {positions && positions[selectedTarget]?.azimuth.toFixed()}°</p>
+					<p>{selectedTarget} Y: {positions && positions[selectedTarget]?.altitude.toFixed()}°</p>
 					<br />
 					<p>Your X: {compass?.toFixed() || ""}°</p>
 					<p>Your Y: {beta?.toFixed() || ""}°</p>
@@ -126,7 +139,7 @@ export default function Home() {
 														if (
 															compassHeading -
 																45 >
-															sunPos?.azimuth
+															positions[selectedTarget]?.azimuth
 														) {
 															setXBorderLeft(
 																"5px solid yellow"
@@ -137,7 +150,7 @@ export default function Home() {
 														if (
 															compassHeading +
 																45 <
-															sunPos?.azimuth
+															positions[selectedTarget]?.azimuth
 														) {
 															setXBorderRight(
 																"5px solid yellow"
@@ -147,7 +160,7 @@ export default function Home() {
 														}
 														if (
 															betaVal + 100 <
-															sunPos.altitude
+															positions[selectedTarget].altitude
 														) {
 															setYBorderTop(
 																"5px solid yellow"
@@ -178,7 +191,7 @@ export default function Home() {
 					}}
 				>
 					{
-						sunPos && compass && (
+						positions && compass && (
 							<>
 								<SunContainer
 									x
@@ -191,7 +204,7 @@ export default function Home() {
 										type={selectedTarget}
 										style={{
 											marginLeft:
-												-(compass - sunPos.azimuth) *
+												-(compass - positions[selectedTarget].azimuth) *
 												10,
 										}}
 									/>
@@ -207,7 +220,7 @@ export default function Home() {
 										type={selectedTarget}
 										style={{
 											marginBottom:
-												-(beta - sunPos.altitude) * 10,
+												-(beta - positions[selectedTarget].altitude) * 10,
 											// background: selectedTarget == 'sun' ? 'ff0b' : selectedTarget == 'moon' ? '#fffb' : '#8B2500bb'
 										}}
 									/>
@@ -226,50 +239,6 @@ export default function Home() {
 	);
 }
 
-export const getServerSideProps = async ({ res, params }) => {
-	var result = ephemeris.getAllPlanets(
-		new Date(),
-		-58.653468489146036,
-		-34.651012982795315,
-		0
-	);
-	// console.log(result.observed);
-	// console.log(result.observed.sun.raw.position.altaz.topocentric)
-	console.log(
-		"sun azimuth: ",
-		result.observed.sun.raw.position.altaz.topocentric.azimuth
-	);
-	console.log(
-		"sun altitude: ",
-		90 + result.observed.sun.raw.position.altaz.topocentric.altitude
-	);
-	console.log("");
-	console.log("");
-	console.log(
-		"mars azimuth: ",
-		result.observed.mars.raw.position.altaz.topocentric.azimuth
-	);
-	console.log(
-		"mars altitude: ",
-		90 + result.observed.mars.raw.position.altaz.topocentric.altitude
-	);
-	console.log("");
-	console.log("");
-	console.log(
-		"moon azimuth: ",
-		result.observed.moon.raw.position.altaz.topocentric.azimuth
-	);
-	console.log(
-		"moon altitude: ",
-		90 + result.observed.moon.raw.position.altaz.topocentric.altitude
-	);
-
-	return {
-		props: {
-			result,
-		},
-	};
-};
 
 const TargetSelected = styled.div`
 	border: none;
@@ -325,7 +294,8 @@ const Target = styled.div`
 	border-radius: 50%;
 	transition: margin 0.1s ease-in-out;
 	z-index: 9;
-	background: ${({ type }) => type == "sun" ? "#ff0b" : type == "moon" ? "#fffb" : "#d60b"};
+	background: ${({ type }) =>
+		type == "sun" ? "#ff0b" : type == "moon" ? "#fffb" : "#d60b"};
 `;
 
 const SunContainer = styled.div`
