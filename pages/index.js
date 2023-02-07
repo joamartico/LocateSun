@@ -1,11 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import SunCalc from "suncalc";
 import { MarsOption, MoonOption, SunOption } from "../components/planets";
-const ephemeris = require("ephemeris");
 
 export default function Home() {
-	// const [sunPos, setSunPos] = useState();
 	const [compass, setCompass] = useState();
 	const [beta, setBeta] = useState();
 	const [xBorderLeft, setXBorderLeft] = useState();
@@ -41,11 +38,6 @@ export default function Home() {
 			var lng = position.coords.longitude;
 			console.log("lat: ", lat);
 			console.log("lng: ", lng);
-			// var date = new Date();
-			// const sunPos = SunCalc.getPosition(date, lat, lng);
-			// const fixedAzimuth = (sunPos.azimuth * 180) / Math.PI + 180;
-			// const fixedAltitude = (sunPos.altitude * 180) / Math.PI + 90;
-			// setSunPos({ altitude: fixedAltitude, azimuth: fixedAzimuth });
 
 			fetch(
 				"/api/getPositions?" +
@@ -193,7 +185,7 @@ export default function Home() {
 					{
 						positions && compass && (
 							<>
-								<SunContainer
+								<TargetContainer
 									x
 									style={{
 										borderLeft: xBorderLeft,
@@ -208,9 +200,9 @@ export default function Home() {
 												10,
 										}}
 									/>
-								</SunContainer>
+								</TargetContainer>
 
-								<SunContainer
+								<TargetContainer
 									y
 									style={{
 										borderTop: yBorderTop,
@@ -224,7 +216,7 @@ export default function Home() {
 											// background: selectedTarget == 'sun' ? 'ff0b' : selectedTarget == 'moon' ? '#fffb' : '#8B2500bb'
 										}}
 									/>
-								</SunContainer>
+								</TargetContainer>
 							</>
 						)
 						// )
@@ -295,10 +287,10 @@ const Target = styled.div`
 	transition: margin 0.1s ease-in-out;
 	z-index: 9;
 	background: ${({ type }) =>
-		type == "sun" ? "#ff0b" : type == "moon" ? "#fffb" : "#d60b"};
+		type == "sun" ? "linear-gradient(to bottom, #FFF500bb, #FFCD00bb)" : type == "moon" ? "radial-gradient(circle, #fffb, #e5e5e5bb, #fffb)" : "linear-gradient(to right, #dd6600bb, #ff9f1abb)"};
 `;
 
-const SunContainer = styled.div`
+const TargetContainer = styled.div`
 	width: ${({ x }) => (x ? "100%" : "155px")};
 	height: ${({ y }) => (y ? "100%" : "155px")};
 	border-bottom: ${({ x }) => (x ? "3px solid #6af5" : "")};

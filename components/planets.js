@@ -23,7 +23,7 @@ export const MoonOption = () => (
 export const MarsOption = () => (
 	<>
 		<Planet
-			color="linear-gradient(to right, #dd6600, #ff9f1a);"
+			color="linear-gradient(to right, #dd6600, #ff9f1a)"
 			size="medium"
 		/>
 		Mars
