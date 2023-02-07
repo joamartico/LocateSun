@@ -8,7 +8,6 @@ export default function Home() {
 	const [sunPos, setSunPos] = useState();
 	const [compass, setCompass] = useState();
 	const [beta, setBeta] = useState();
-	const [lockX, setLockX] = useState(false);
 	const [xBorderLeft, setXBorderLeft] = useState();
 	const [xBorderRight, setXBorderRight] = useState();
 	const [yBorderTop, setYBorderTop] = useState();
@@ -188,7 +187,8 @@ export default function Home() {
 										borderRight: xBorderRight,
 									}}
 								>
-									<Sun
+									<Target
+										type={selectedTarget}
 										style={{
 											marginLeft:
 												-(compass - sunPos.azimuth) *
@@ -204,10 +204,11 @@ export default function Home() {
 									}}
 								>
 									<Target
+										type={selectedTarget}
 										style={{
 											marginBottom:
 												-(beta - sunPos.altitude) * 10,
-											background: selectedTarget == 'sun' ? 'ff0b' : selectedTarget == 'moon' ? '#fffb' : '#8B2500bb'
+											// background: selectedTarget == 'sun' ? 'ff0b' : selectedTarget == 'moon' ? '#fffb' : '#8B2500bb'
 										}}
 									/>
 								</SunContainer>
@@ -324,6 +325,7 @@ const Target = styled.div`
 	border-radius: 50%;
 	transition: margin 0.1s ease-in-out;
 	z-index: 9;
+	background: ${({ type }) => type == "sun" ? "ff0b" : type == "moon" ? "#fffb" : "#8B2500bb"};
 `;
 
 const SunContainer = styled.div`
