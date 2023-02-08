@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { MarsOption, MoonOption, SunOption } from "../components/planets";
+import { GetPlanet } from "../components/GetPlanet";
 
 export default function Home() {
 	const [compass, setCompass] = useState();
@@ -14,6 +14,8 @@ export default function Home() {
 	const [positions, setPositions] = useState();
 
 	const videoRef = useRef();
+
+	const planets = ["sun", "moon", "mars", "mercury", "venus", "jupiter", "saturn"];
 
 	const getVideo = () => {
 		setShowCamera((prev) => !prev);
@@ -58,34 +60,18 @@ export default function Home() {
 			<ion-content fullscreen>
 				<TargetSelected onClick={() => setShowTargets((prev) => !prev)}>
 					<TargetOption>
-						{selectedTarget == "sun" ? (
-							<SunOption />
-						) : selectedTarget == "moon" ? (
-							<MoonOption />
-						) : (
-							<MarsOption />
-						)}
+						<GetPlanet planet={selectedTarget} withText />
 					</TargetOption>
 
 					{showTargets && (
 						<TargetsContainer>
-							<TargetOption
-								onClick={() => setSelectedTarget("sun")}
-							>
-								<SunOption />
-							</TargetOption>
-
-							<TargetOption
-								onClick={() => setSelectedTarget("moon")}
-							>
-								<MoonOption />
-							</TargetOption>
-
-							<TargetOption
-								onClick={() => setSelectedTarget("mars")}
-							>
-								<MarsOption />
-							</TargetOption>
+							{planets.map((planet) => (
+								<TargetOption
+									onClick={() => setSelectedTarget(planet)}
+								>
+									<GetPlanet planet={planet} withText />
+								</TargetOption>
+							))}
 						</TargetsContainer>
 					)}
 				</TargetSelected>
@@ -214,9 +200,11 @@ export default function Home() {
 										borderRight: xBorderRight,
 									}}
 								>
-									<Target
-										type={selectedTarget}
+									<GetPlanet
+										planet={selectedTarget}
 										style={{
+											transform: "scale(5)",
+											opacity: 0.7,
 											marginLeft:
 												-(
 													compass -
@@ -233,9 +221,11 @@ export default function Home() {
 										borderTop: yBorderTop,
 									}}
 								>
-									<Target
-										type={selectedTarget}
+									<GetPlanet
+										planet={selectedTarget}
 										style={{
+											transform: "scale(5)",
+											opacity: 0.7,
 											marginBottom:
 												-(
 													beta -
@@ -253,12 +243,7 @@ export default function Home() {
 				</div>
 			</ion-content>
 
-			<CameraButton
-				onClick={() => {
-					getVideo();
-					// setShowCamera((prev) => !prev);
-				}}
-			>
+			<CameraButton onClick={() => getVideo()}>
 				<ion-icon name="camera" color="medium" />
 			</CameraButton>
 		</>
@@ -297,7 +282,7 @@ const TargetsContainer = styled.div`
 `;
 
 const TargetOption = styled.div`
-	width: 100px;
+	width: 120px;
 	display: flex;
 	align-items: center;
 	justify-content: left;
@@ -310,21 +295,6 @@ const TargetOption = styled.div`
 	/* padding: 0 10px; */
 	/* width: 48px; */
 	cursor: pointer;
-`;
-
-const Target = styled.div`
-	height: 150px;
-	width: 150px;
-	/* background: #ff0b; */
-	border-radius: 50%;
-	transition: margin 0.1s ease-in-out;
-	z-index: 9;
-	background: ${({ type }) =>
-		type == "sun"
-			? "linear-gradient(to bottom, #FFF500bb, #FFCD00bb)"
-			: type == "moon"
-			? "radial-gradient(circle, #fffb, #e5e5e5bb, #fffb)"
-			: "linear-gradient(to right, #dd6600bb, #ff9f1abb)"};
 `;
 
 const TargetContainer = styled.div`
