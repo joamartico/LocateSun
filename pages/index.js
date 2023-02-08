@@ -11,7 +11,7 @@ export default function Home() {
 	const [showCamera, setShowCamera] = useState(false);
 	const [showTargets, setShowTargets] = useState(false);
 	const [selectedTarget, setSelectedTarget] = useState("sun");
-	const [positions, setPositions] = useState()
+	const [positions, setPositions] = useState();
 
 	const videoRef = useRef();
 
@@ -46,9 +46,9 @@ export default function Home() {
 						lng,
 					})
 			).then(async (res) => {
-				const _positions = await res.json()
-				console.log(_positions)
-				setPositions(_positions)
+				const _positions = await res.json();
+				console.log(_positions);
+				setPositions(_positions);
 			});
 		});
 	}, []);
@@ -98,9 +98,25 @@ export default function Home() {
 					style={{ opacity: showCamera ? 1 : 0 }}
 				/>
 
-				<div style={{ paddingLeft: "10px", position: "absolute", textTransform: 'capitalize' }}>
-					<p>{selectedTarget} X: {positions && positions[selectedTarget]?.azimuth.toFixed()}°</p>
-					<p>{selectedTarget} Y: {positions && positions[selectedTarget]?.altitude.toFixed()}°</p>
+				<div
+					style={{
+						paddingLeft: "10px",
+						position: "absolute",
+						textTransform: "capitalize",
+					}}
+				>
+					<p>
+						{selectedTarget} X:{" "}
+						{positions &&
+							positions[selectedTarget]?.azimuth.toFixed()}
+						°
+					</p>
+					<p>
+						{selectedTarget} Y:{" "}
+						{positions &&
+							positions[selectedTarget]?.altitude.toFixed()}
+						°
+					</p>
 					<br />
 					<p>Your X: {compass?.toFixed() || ""}°</p>
 					<p>Your Y: {beta?.toFixed() || ""}°</p>
@@ -131,7 +147,9 @@ export default function Home() {
 														if (
 															compassHeading -
 																45 >
-															positions[selectedTarget]?.azimuth
+															positions[
+																selectedTarget
+															]?.azimuth
 														) {
 															setXBorderLeft(
 																"5px solid yellow"
@@ -142,7 +160,9 @@ export default function Home() {
 														if (
 															compassHeading +
 																45 <
-															positions[selectedTarget]?.azimuth
+															positions[
+																selectedTarget
+															]?.azimuth
 														) {
 															setXBorderRight(
 																"5px solid yellow"
@@ -152,7 +172,9 @@ export default function Home() {
 														}
 														if (
 															betaVal + 100 <
-															positions[selectedTarget].altitude
+															positions[
+																selectedTarget
+															].altitude
 														) {
 															setYBorderTop(
 																"5px solid yellow"
@@ -196,8 +218,11 @@ export default function Home() {
 										type={selectedTarget}
 										style={{
 											marginLeft:
-												-(compass - positions[selectedTarget].azimuth) *
-												10,
+												-(
+													compass -
+													positions[selectedTarget]
+														.azimuth
+												) * 10,
 										}}
 									/>
 								</TargetContainer>
@@ -212,7 +237,11 @@ export default function Home() {
 										type={selectedTarget}
 										style={{
 											marginBottom:
-												-(beta - positions[selectedTarget].altitude) * 10,
+												-(
+													beta -
+													positions[selectedTarget]
+														.altitude
+												) * 10,
 											// background: selectedTarget == 'sun' ? 'ff0b' : selectedTarget == 'moon' ? '#fffb' : '#8B2500bb'
 										}}
 									/>
@@ -224,13 +253,17 @@ export default function Home() {
 				</div>
 			</ion-content>
 
-			<CameraButton onClick={() => getVideo()}>
+			<CameraButton
+				onClick={() => {
+					getVideo();
+					// setShowCamera((prev) => !prev);
+				}}
+			>
 				<ion-icon name="camera" color="medium" />
 			</CameraButton>
 		</>
 	);
 }
-
 
 const TargetSelected = styled.div`
 	border: none;
@@ -287,7 +320,11 @@ const Target = styled.div`
 	transition: margin 0.1s ease-in-out;
 	z-index: 9;
 	background: ${({ type }) =>
-		type == "sun" ? "linear-gradient(to bottom, #FFF500bb, #FFCD00bb)" : type == "moon" ? "radial-gradient(circle, #fffb, #e5e5e5bb, #fffb)" : "linear-gradient(to right, #dd6600bb, #ff9f1abb)"};
+		type == "sun"
+			? "linear-gradient(to bottom, #FFF500bb, #FFCD00bb)"
+			: type == "moon"
+			? "radial-gradient(circle, #fffb, #e5e5e5bb, #fffb)"
+			: "linear-gradient(to right, #dd6600bb, #ff9f1abb)"};
 `;
 
 const TargetContainer = styled.div`
@@ -319,14 +356,15 @@ const CameraButton = styled.div`
 	align-items: center;
 	cursor: pointer;
 	&:active {
-		opacity: 0.7;
+		opacity: 0.6;
 	}
 `;
 
 const CameraVideo = styled.video`
 	position: fixed;
 	top: 0;
-	left: 0;
+	left: 50%;
+	transform: translate(-50%);
 	height: 100vh;
 	width: auto;
 `;
