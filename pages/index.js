@@ -186,7 +186,7 @@ export default function Home() {
 										"deviceorientationabsolute",
 										function (event) {
 											var compassHeading =
-												180 - event.alpha;
+												330 - event.alpha;
 											setCompass(
 												compassHeading
 											);
