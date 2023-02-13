@@ -15,7 +15,15 @@ export default function Home() {
 
 	const videoRef = useRef();
 
-	const planets = ["sun", "moon", "mars", "mercury", "venus", "jupiter", "saturn"];
+	const planets = [
+		"sun",
+		"moon",
+		"mars",
+		"mercury",
+		"venus",
+		"jupiter",
+		"saturn",
+	];
 
 	const getVideo = () => {
 		setShowCamera((prev) => !prev);
@@ -174,7 +182,50 @@ export default function Home() {
 										})
 										.catch(alert);
 								} else {
-									alert("requestPermission is not a function")
+									window.addEventListener(
+										"deviceorientation",
+										function (event) {
+											var compassHeading = event.alpha;
+											setCompass(compassHeading);
+
+											var betaVal = event.beta;
+											setBeta(betaVal);
+
+											if (
+												compassHeading - 45 >
+												positions[selectedTarget]
+													?.azimuth
+											) {
+												setXBorderLeft(
+													"5px solid yellow"
+												);
+											} else {
+												setXBorderLeft("");
+											}
+											if (
+												compassHeading + 45 <
+												positions[selectedTarget]
+													?.azimuth
+											) {
+												setXBorderRight(
+													"5px solid yellow"
+												);
+											} else {
+												setXBorderRight("");
+											}
+											if (
+												betaVal + 100 <
+												positions[selectedTarget]
+													.altitude
+											) {
+												setYBorderTop(
+													"5px solid yellow"
+												);
+											} else {
+												setYBorderTop("");
+											}
+										}
+									);
 								}
 							}}
 						>
