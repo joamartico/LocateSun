@@ -183,7 +183,7 @@ export default function Home() {
 										.catch(alert);
 								} else {
 									window.addEventListener(
-										"deviceorientation",
+										"deviceorientationabsolute",
 										function (event) {
 											var compassHeading = event.alpha;
 											setCompass(compassHeading);
@@ -224,7 +224,7 @@ export default function Home() {
 											} else {
 												setYBorderTop("");
 											}
-										}
+										}, true
 									);
 								}
 							}}
