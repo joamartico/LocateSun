@@ -170,6 +170,60 @@ export default function Home() {
 														}
 													}
 												);
+											} else {
+												window.addEventListener(
+													"deviceorientation",
+													function (event) {
+														var compassHeading =
+															event.webkitCompassHeading;
+														setCompass(
+															compassHeading
+														);
+
+														var betaVal =
+															event.beta;
+														setBeta(betaVal);
+
+														if (
+															compassHeading -
+																45 >
+															positions[
+																selectedTarget
+															]?.azimuth
+														) {
+															setXBorderLeft(
+																"5px solid yellow"
+															);
+														} else {
+															setXBorderLeft("");
+														}
+														if (
+															compassHeading +
+																45 <
+															positions[
+																selectedTarget
+															]?.azimuth
+														) {
+															setXBorderRight(
+																"5px solid yellow"
+															);
+														} else {
+															setXBorderRight("");
+														}
+														if (
+															betaVal + 100 <
+															positions[
+																selectedTarget
+															].altitude
+														) {
+															setYBorderTop(
+																"5px solid yellow"
+															);
+														} else {
+															setYBorderTop("");
+														}
+													}
+												);
 											}
 										})
 										.catch(alert);
