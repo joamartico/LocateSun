@@ -170,11 +170,11 @@ export default function Home() {
 														}
 													}
 												);
-											} else {
-												alert('alert')
 											}
 										})
 										.catch(alert);
+								} else {
+									alert("requestPermission is not a function")
 								}
 							}}
 						>
