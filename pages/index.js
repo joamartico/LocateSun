@@ -183,18 +183,24 @@ export default function Home() {
 										.catch(alert);
 								} else {
 									window.addEventListener(
-										"deviceorientationabsolute",
+										"deviceorientation",
 										function (event) {
-											var compassHeading = event.alpha;
-											setCompass(compassHeading);
+											var compassHeading =
+												event.webkitCompassHeading;
+											setCompass(
+												compassHeading
+											);
 
-											var betaVal = event.beta;
+											var betaVal =
+												event.beta;
 											setBeta(betaVal);
 
 											if (
-												compassHeading - 45 >
-												positions[selectedTarget]
-													?.azimuth
+												compassHeading -
+													45 >
+												positions[
+													selectedTarget
+												]?.azimuth
 											) {
 												setXBorderLeft(
 													"5px solid yellow"
@@ -203,9 +209,11 @@ export default function Home() {
 												setXBorderLeft("");
 											}
 											if (
-												compassHeading + 45 <
-												positions[selectedTarget]
-													?.azimuth
+												compassHeading +
+													45 <
+												positions[
+													selectedTarget
+												]?.azimuth
 											) {
 												setXBorderRight(
 													"5px solid yellow"
@@ -215,8 +223,9 @@ export default function Home() {
 											}
 											if (
 												betaVal + 100 <
-												positions[selectedTarget]
-													.altitude
+												positions[
+													selectedTarget
+												].altitude
 											) {
 												setYBorderTop(
 													"5px solid yellow"
@@ -224,7 +233,7 @@ export default function Home() {
 											} else {
 												setYBorderTop("");
 											}
-										}, true
+										}
 									);
 								}
 							}}
