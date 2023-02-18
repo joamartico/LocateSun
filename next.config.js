@@ -1,33 +1,16 @@
-const path = require('path')
-const CopyPlugin = require('copy-webpack-plugin')
-const withPWA = require('next-pwa')
-const runtimeCaching = require('next-pwa/cache');
+/** @type {import('next').NextConfig} */
 
-module.exports = withPWA({
-  
-  pwa: {
-		dest: "public",
-		register: true,
-		skipWaiting: true,
-		runtimeCaching,
-		buildExcludes: [/middleware-manifest.json$/]
-	},
-    
-
-  webpack: (config) => {
-    config.plugins.push(
-      new CopyPlugin({
-        patterns: [
-          {
-            from: path.join(
-              __dirname,
-              'node_modules/ionicons/dist/ionicons/svg'
-            ),
-            to: path.join(__dirname, 'public/svg'),
-          },
-        ],
-      })
-    )
-    return config
-  },
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register:true,
+  // disable: process.env.NODE_ENV === 'development'
 })
+const nextConfig = withPWA({
+  reactStrictMode: true,
+  swcMinify: true,
+  // images: {
+  //   domains:["images.ctfassets.net"]
+  // }
+})
+
+module.exports = nextConfig
