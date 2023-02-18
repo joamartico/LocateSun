@@ -1,17 +1,16 @@
 {
-    "theme_color": "#e0f6f6",
-    "background_color": "#66CFD5",
-    "display": "standalone",
-    "start_url": ".",
-    "name": "SunLocate",
-    "short_name": "SunLocate",
-    "icons": [
-        {
-          "src": "rounded.png",
-          "sizes": "512x512",
-          "type": "image/png"
-        }
-    ]
-  }
-
-  
+  "name": "SunLocate",
+  "short_name": "SunLocate",
+  "icons": [
+      {
+        "src": "rounded.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+  ],
+  "theme_color": "#e0f6f6",
+  "background_color": "#66CFD5",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+}
